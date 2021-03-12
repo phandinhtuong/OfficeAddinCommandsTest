@@ -181,7 +181,7 @@
       </bt:Images>
       <bt:Urls>
         <bt:Url id="Contoso.FunctionFile.Url" DefaultValue="https://vimoitruong.xyz/office-test/FunctionFile.html" />
-        <bt:Url id="Contoso.Taskpane1.Url" DefaultValue="https://commandsimple.azurewebsites.net/Taskpane.html" />
+        <bt:Url id="Contoso.Taskpane1.Url" DefaultValue="https://vimoitruong.xyz/office-test/Taskpane.html" />
         <bt:Url id="Contoso.Taskpane2.Url" DefaultValue="https://commandsimple.azurewebsites.net/Taskpane2.html" />
          <!--LearnMore URL currently not used -->
         <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://commandsimple.azurewebsites.net/GetStarted.html">
