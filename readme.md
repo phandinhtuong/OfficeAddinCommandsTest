@@ -1,6 +1,6 @@
 # Simple Add-in Commands Sample #
 ## TUONG
-Change cell's color command.
+Change cell's color, scroll down command.
 
 ## Overview
 This sample showcases how to create an add-in with a custom Tab with Ribbon buttons. 

@@ -25,10 +25,16 @@
 
       //Notice function needs to be in global namespace
       function writeText(event) {
-        //Consult Office.js API reference to see all you can do. This just shows the simplest action.
         Excel.run(function (context) {
+          // TODO1: Queue table creation logic here.
+          //var currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+          //var expensesTable = currentWorksheet.tables.add("A1:D1", true /*hasHeaders*/);
+          //expensesTable.name = "ExpensesTable";
           var range = context.workbook.getSelectedRange();
           range.format.fill.color = "#873F11";
+          // TODO2: Queue commands to populate the table with data.
+
+          // TODO3: Queue commands to format the table.
 
           return context.sync();
         }).catch(function (error) {
@@ -37,6 +43,9 @@
             console.log("Debug info: " + JSON.stringify(error.debugInfo));
           }
         });
+
+        //Consult Office.js API reference to see all you can do. This just shows the simplest action.
+
         Office.context.document.setSelectedDataAsync(
           "Test file on web: ExecuteFunction Works with Prod Office.js Button ID=" +
             event.source.id,

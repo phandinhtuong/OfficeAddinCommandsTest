@@ -32,86 +32,217 @@
       (function () {
         Office.initialize = function (reason) {
           $(document).ready(function () {
-            $("#writeTextButton").click(function (event) {
-              writeText();
+            $("#colorizeButton").click(function (event) {
+              colorize();
+            });
+            $("#scrollDownButton").click(function (event) {
+              scrollDown();
             });
             //
           });
         };
 
         // Reads data from current document selection and displays a notification
-        function writeText() {
-          Excel.run(function (context) {
+        function colorize() {
+          Excel.run(async function (context) {
             var range = context.workbook.getSelectedRange();
-            var saturation = document.getElementById("saturation").value;
-            if (isNaN(saturation) || saturation == "") {
-              //TODO: Display error on dialog or something
-              range.values = "Saturation is NaN";
-            } else if (saturation < 0 || saturation > 255) {
-              //TODO: Display error on dialog or something
-              range.values = "Saturation is out of range";
-            } else {
-              var colorSelected = document.getElementById("color").value;
+            range.load(["columnCount", "rowCount", "values"]);
+            await context.sync();
+            var colorSelected = document.getElementById("color").value;
 
-              var saturationInHex = parseInt(saturation).toString(16);
-              if (saturationInHex.length < 2) {
-                saturationInHex = "0" + saturationInHex;
-              }
+            var i, j, tmpRangeValueColorInHex;
 
-              if (saturation > 128) {
-                range.format.font.color = "black";
-              } else {
-                range.format.font.color = "white";
-              }
-              //range.format.fill.color = "#873F11";
-              switch (colorSelected) {
-                case "Red":
-                  range.format.fill.color = "#" + saturationInHex + "0000";
-                  range.values = "#" + saturationInHex + "0000";
-                  break;
-                case "Green":
-                  range.format.fill.color = "#00" + saturationInHex + "00";
-                  range.values = "#00" + saturationInHex + "00";
-                  break;
-                case "Blue":
-                  range.format.fill.color = "#0000" + saturationInHex;
-                  range.values = "#0000" + saturationInHex;
-                  break;
-                case "Gray":
-                  range.format.fill.color =
-                    "#" + saturationInHex + saturationInHex + saturationInHex;
-                  range.values =
-                    "#" + saturationInHex + saturationInHex + saturationInHex;
-                  break;
-              }
+            switch (
+              colorSelected //REMEMBER TO CHANGE ALL CASES
+            ) {
+              case "Red":
+                for (i = 0; i < range.rowCount; i++) {
+                  for (j = 0; j < range.columnCount; j++) {
+                    if (
+                      typeof range.values[i][j] != "number" ||
+                      range.values[i][j] < 0 ||
+                      range.values[i][j] > 255
+                    ) {
+                      //not a number or out of range
+                      range.getCell(i, j).format.fill.color = "white";
+                      range.getCell(i, j).format.font.color = "black";
+                    } else {
+                      tmpRangeValueColorInHex =
+                        "#" +
+                        parseInt(range.values[i][j])
+                          .toString(16)
+                          .padStart(2, "0") +
+                        "0000";
+                      range.getCell(
+                        i,
+                        j
+                      ).format.fill.color = tmpRangeValueColorInHex;
+                      if (parseInt(range.values[i][j]) > 128) {
+                        range.getCell(i, j).format.font.color = "black";
+                      } else {
+                        range.getCell(i, j).format.font.color = "white";
+                      }
+                    }
+                  }
+                }
+                break;
+              case "Green":
+                for (i = 0; i < range.rowCount; i++) {
+                  for (j = 0; j < range.columnCount; j++) {
+                    if (
+                      typeof range.values[i][j] != "number" ||
+                      range.values[i][j] < 0 ||
+                      range.values[i][j] > 255
+                    ) {
+                      //not a number or out of range
+                      range.getCell(i, j).format.fill.color = "white";
+                      range.getCell(i, j).format.font.color = "black";
+                    } else {
+                      tmpRangeValueColorInHex =
+                        "#00" +
+                        parseInt(range.values[i][j])
+                          .toString(16)
+                          .padStart(2, "0") +
+                        "00";
+                      range.getCell(
+                        i,
+                        j
+                      ).format.fill.color = tmpRangeValueColorInHex;
+                      if (parseInt(range.values[i][j]) > 128) {
+                        range.getCell(i, j).format.font.color = "black";
+                      } else {
+                        range.getCell(i, j).format.font.color = "white";
+                      }
+                    }
+                  }
+                }
+                // range.format.fill.color = "#00" + saturationInHex + "00";
+                //range.values = "#00" + saturationInHex + "00";
+                break;
+              case "Blue":
+                for (i = 0; i < range.rowCount; i++) {
+                  for (j = 0; j < range.columnCount; j++) {
+                    if (
+                      typeof range.values[i][j] != "number" ||
+                      range.values[i][j] < 0 ||
+                      range.values[i][j] > 255
+                    ) {
+                      //not a number or out of range
+                      range.getCell(i, j).format.fill.color = "white";
+                      range.getCell(i, j).format.font.color = "black";
+                    } else {
+                      tmpRangeValueColorInHex =
+                        "#0000" +
+                        parseInt(range.values[i][j])
+                          .toString(16)
+                          .padStart(2, "0");
+                      range.getCell(
+                        i,
+                        j
+                      ).format.fill.color = tmpRangeValueColorInHex;
+                      if (parseInt(range.values[i][j]) > 128) {
+                        range.getCell(i, j).format.font.color = "black";
+                      } else {
+                        range.getCell(i, j).format.font.color = "white";
+                      }
+                    }
+                  }
+                }
+                // range.format.fill.color = "#0000" + saturationInHex;
+                //range.values = "#0000" + saturationInHex;
+                break;
+              case "Gray":
+                for (i = 0; i < range.rowCount; i++) {
+                  for (j = 0; j < range.columnCount; j++) {
+                    if (
+                      typeof range.values[i][j] != "number" ||
+                      range.values[i][j] < 0 ||
+                      range.values[i][j] > 255
+                    ) {
+                      //not a number or out of range
+                      range.getCell(i, j).format.fill.color = "white";
+                      range.getCell(i, j).format.font.color = "black";
+                    } else {
+                      tmpRangeValueColorInHex = parseInt(range.values[i][j])
+                        .toString(16)
+                        .padStart(2, "0");
+                      tmpRangeValueColorInHex =
+                        "#" +
+                        tmpRangeValueColorInHex +
+                        tmpRangeValueColorInHex +
+                        tmpRangeValueColorInHex;
+                      range.getCell(
+                        i,
+                        j
+                      ).format.fill.color = tmpRangeValueColorInHex;
+                      if (parseInt(range.values[i][j]) > 128) {
+                        range.getCell(i, j).format.font.color = "black";
+                      } else {
+                        range.getCell(i, j).format.font.color = "white";
+                      }
+                    }
+                  }
+                }
+                // range.format.fill.color =
+                //   "#" + saturationInHex + saturationInHex + saturationInHex;
+                //range.values =
+                //"#" + saturationInHex + saturationInHex + saturationInHex;
+                break;
             }
-
-            return context.sync();
+            await context.sync();
           }).catch(function (error) {
             console.log("Error: " + error);
             if (error instanceof OfficeExtension.Error) {
               console.log("Debug info: " + JSON.stringify(error.debugInfo));
             }
           });
-          // Office.context.document.setSelectedDataAsync("Data hereee",
-          //     function (asyncResult) {
-          //         var error = asyncResult.error;
-          //         if (asyncResult.status === "failed") {
-          //             //show error. Upcoming displayDialog API will help here.
-          //         }
-          //         else {
-          //             //show success.Upcoming displayDialog API will help here.
-          //         }
-          //     });
+        }
+        function scrollDown() {
+          Excel.run(async function (context) {
+            var scrollDownInput = document.getElementById("scrollDownInput")
+              .value;
+            var sheet = context.workbook.worksheets.getActiveWorksheet();
+            var range = context.workbook.getSelectedRange();
+            if (scrollDownInput == "") {
+              range.values = "Please input something";
+              await context.sync();
+            } else {
+              range.values = scrollDownInput;
+
+              await context.sync();
+              range = range.getRowsBelow(15);
+              range.select();
+              await context.sync();
+              range = range.getRowsBelow();
+              range.select();
+              await context.sync();
+              range = range.getRowsAbove(14);
+              range.select();
+              await context.sync();
+              range = range.getRowsAbove();
+              range.select();
+              await context.sync();
+            }
+            focusInputScrolldown();
+          }).catch(function (error) {
+            console.log("Error: " + error);
+            if (error instanceof OfficeExtension.Error) {
+              console.log("Debug info: " + JSON.stringify(error.debugInfo));
+            }
+          });
+        }
+        function focusInputScrolldown() {
+          var input = document.getElementById("scrollDownInput");
+          input.select();
         }
       })();
     </script>
   </head>
   <body>
-    <button class="ms-Button" id="writeTextButton">
+    <button class="ms-Button" id="colorizeButton">
       <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--plus"></i></span>
-      <span class="ms-Button-label">Insert Text</span>
-      <span class="ms-Button-description">Insert Text into Document</span>
+      <span class="ms-Button-label">Colorize</span>
+      <span class="ms-Button-description">Colorize cell</span>
     </button>
     <br />
     <select name="color" id="color">
@@ -121,7 +252,12 @@
       <option value="Gray">Gray</option>
     </select>
     <br />
-    <label for="saturation">Saturation:</label>
-    <input type="text" id="saturation" name="saturation" />
+    <label for="scrollDownInput">Scroll Down Input</label>
+    <input type="text" id="scrollDownInput" name="scrollDownInput" />
+    <button class="ms-Button" id="scrollDownButton">
+      <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--plus"></i></span>
+      <span class="ms-Button-label">Scroll Down</span>
+      <span class="ms-Button-description">Scroll Down Document</span>
+    </button>
   </body>
 </html>
